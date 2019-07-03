@@ -1,6 +1,6 @@
 # paper-rock-scissors
 
-Welcome to my paper,rock and scissors game!
+Welcome to my paper-rock-scissors game!
 
 To start the game follow these steps:
 
