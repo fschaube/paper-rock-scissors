@@ -1,16 +1,11 @@
 import game_logic
 
-print(
-    "Welcome to Paper-Rock-Scissors Game! Against which Player do you wanna play?"
-)
-
-
 def logic():
     player_options = {
-        "randomplayer": game_logic.RandomPlayer(),
-        "humanplayer": game_logic.HumanPlayer(),
-        "reflectplayer": game_logic.ReflectPlayer(),
-        "cycleplayer": game_logic.CyclePlayer()
+        "1": game_logic.RandomPlayer(),
+        "2": game_logic.HumanPlayer(),
+        "3": game_logic.ReflectPlayer(),
+        "4": game_logic.CyclePlayer()
     }
 
     player1 = input("Choose Player 1:\n").lower()
@@ -25,20 +20,22 @@ def logic():
                             player_options[player2])
     game.play_game()
 
-
 def choice():
     choice = input("Do you wanna play again? Type 'yes' or 'no'\n")
     if choice in "yes":
         logic()
     elif choice in "no":
-        print("Goodbye")
+        print("Goodbye :-)")
+        exit();
     else:
         print("I don't understand you. Please repeat the entry!")
         choice()
 
 if __name__ == '__main__':
-    print("""Welcome to Paper-Rock-Scissors Game! 
-    Against which Player do you wanna play?""")
-
-logic()
-choice()
+    print("Welcome to Paper-Rock-Scissors Game! Against which Player do you wanna play?\n")
+    print( "- randomplayer: 1\n" )
+    print( "- humanplayer: 2\n" )
+    print( "- reflectplayer: 3\n" )
+    print( "- cycleplayer: 4\n" )
+    logic()
+    choice()

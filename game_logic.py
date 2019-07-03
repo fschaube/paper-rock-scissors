@@ -1,40 +1,29 @@
 #!/usr/bin/env python3
 
 import random
-"""This program plays a game of Rock, Paper, Scissors between two Players,
-and reports both Player's scores each round."""
 
 moves = ['rock', 'paper', 'scissors']
-"""The Player class is the parent class for all of the Players
-in this game"""
 
 class Player:
     def move(self):
         return moves[0]
 
-    def __init__(self):
-        pass
-
     def learn(self, my_move, their_move):
         pass
 
-
 class RandomPlayer(Player):
-    def move(self):
+    def move(self, player_name="Player"):
         return random.choice(moves)
 
-
 class HumanPlayer(Player):
-    def move(self):
-        m = input("What do you want to choose?\n")
+    def move(self, player_name="Player"):
+        m = input(f"{player_name} - Choose your move:\n" + "\n".join(moves) + "\n")
         while m not in moves:
-            m = input("Please repeat the entry!\n")
+            m = input("Invalid input. Please try again.\n")
         return m
 
-
 class ReflectPlayer(Player):
-    def __init__(self):
-        Player.__init__(self)
+    def __init__(self, player_name="Player"):
         self.their_move = None
 
     def move(self):
@@ -42,29 +31,18 @@ class ReflectPlayer(Player):
             return moves[0]
         else:
             return self.their_move
-            
 
     def learn(self, my_move, their_move):
         self.their_move = their_move
 
-
 class CyclePlayer(Player):
-
-    def __init__(self):
-        Player.__init__(self)
-        self.movePicked = random.randint(0,2)
+    def __init__(self, player_name="Player"):
+        self.movePicked = random.randint(0, 2)
 
     def move(self):
-        if self.movePicked == 0:
-            self.movePicked = 1
-            return moves[self.movePicked]
-        elif self.movePicked == 1:
-            self.movePicked == 2
-            return moves[self.movePicked]
-        else:
-            self.movePicked = 0
-            return moves[self.movePicked]        
-
+        move = moves[self.movePicked]
+        self.movePicked = (self.movePicked + 1) % 3  # Cycle through moves
+        return move
 
 class Game:
     def __init__(self, p1, p2):
@@ -74,24 +52,19 @@ class Game:
         self.p2counter = 0
 
     def play_round(self):
-
-        move1 = self.p1.move()
-        move2 = self.p2.move()
+        move1 = self.p1.move("Player 1")
+        move2 = self.p2.move("Player 2")
 
         print(f"Player 1: {move1}  Player 2: {move2}")
-        if move1 == "scissors" and move2 == "paper":
-            print("Player 1 wins!")
-            self.p1counter += 1
-        elif move1 == "rock" and move2 == "scissors":
-            print("Player 1 wins!")
-            self.p1counter1 += 1
-        elif move1 == "paper" and move2 == "rock":
-            print("Player 1 wins!")
+        if (move1 == "scissors" and move2 == "paper") or \
+           (move1 == "rock" and move2 == "scissors") or \
+           (move1 == "paper" and move2 == "rock"):
+            print("Player 1 wins this round!")
             self.p1counter += 1
         elif move1 == move2:
-            print("tied")
+            print("It's a tie!")
         else:
-            print("Player 2 wins!")
+            print("Player 2 wins this round!")
             self.p2counter += 1
 
         self.p1.learn(move1, move2)
@@ -99,15 +72,18 @@ class Game:
 
     def play_game(self):
         print("Game start!")
-        for round in range(3):
-            print(f"Round {round}:")
+        rounds = int(input("How many rounds would you like to play? "))
+        for round in range(rounds):
+            print(f"Round {round + 1}:")
             self.play_round()
+            print(f"Score -> Player 1: {self.p1counter}, Player 2: {self.p2counter}\n")
+
         if self.p1counter > self.p2counter:
-            response = "Player 1 wins" + " " + str(self.p1counter) + " " + "times!"
+            response = f"Player 1 wins the game {self.p1counter} to {self.p2counter}!"
         elif self.p2counter > self.p1counter:
-            response = "Player 2 wins" + " " + str(self.p2counter) + " " + "times!"
+            response = f"Player 2 wins the game {self.p2counter} to {self.p1counter}!"
         else:
-            response = "No one wins - final tied"
+            response = "The game is tied!"
 
         print(response)
         print("Game over!")
